@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "drizzio-gsheet-integration",
+  "private_key_id": "23a9889a1516da050f314650999bbfbec3ae4273",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCoJoL6HCY75OH/\nrHmAyuEkh7bT97G70Bcaheh3ONsjYaj3O45ZuKbhFCuA7AOg84P0ilGVNXT9lIa6\nOHf1+MGOHOR/+PzXWMn5Un1yk4oX4BtAadJ/SjybfRCNLaYibB9mWVGk5QzQRy8V\nmFn8B5ZNtJ1WIPbv2W0XHxS3GnGiUmgzbsQzjWpeexbqcUr/AmWatNwL/XIYGDqu\nxWH/AMgEbDuicAVdbsbybthh/G7TJZoWEA3qXab+nUCuZN3wFt0+m/JXfw7holc3\nosT0oWPNYpRTKRfheYMZ2UlP2PU8oCC4oHVLpWT3degkYDaMvF/jmUJ1TssxBuEV\nUK1DNF23AgMBAAECggEAF9OhMpyjhFAqAAcqDmhxH7KFYyLRkgnqBC2eY6pwTuKr\nRSEwyiDisLkhcvq+huOKuq+Q4OI6yiXuM1wGD5oonyET9dhLx54CvKwGL6KdakWs\nxuNX2wajcOr3WfHyfSUyC9gzO/ji6G51ywsUESToFOm3c7lnFFSMYz7ZuhpqqLPm\n05Rcj6Bq0c7HwfDWm7Vn0RHc54EDmXkLe5dddT0juMKx5CIPT3Xj9Bx5AZquL3VB\n4DVdBTPFxcwq+Xgj54H/0YvCbjnWgFUht4/ddNoccCU3YOU9+COjujI2GWbyjkkP\nfIunmmURrlCQuHF1D2hwnBrFTx8UBwdFG9tjas9FsQKBgQDU0V2GUInZWnXBJgU5\nTArgBfn6BqzxlFodhSCMvDikqMMEIGCmn1bo0D6b+Bn/jg4hdGv44ZchAOAYMvs8\n5wJgyd93EHXvTAvrgGGQ5/zS68biN+bbYD0YRTEVREziyKURBf4zMtb3VNIAvLEG\nu5bKL8URuIcFCAFE3R7B0Tyy0QKBgQDKRPAPpMS6rUdiLhjiecdqt7wqXCcGVqcq\naykqpX8EnCRsQxW2R9pv71DUosqNwUvBpK406eDybHL+5MUnld3okncKiwWhQRrr\ncRS1t9TXY+0rRhEaIdZ2/gJTO+JpqxVvctAD4IYXM9eTvT9AVVD5fk+foNSkyZ5T\nupYlOE5aBwKBgB9LTipjC3I3uBsX4SrEwNCicFjQxHudqgavPdMUFmw4GL0xmaTG\nx3viq2I6AHCwzekjeoEVgyiqPUmxrXoOKi5bYQ3cEMuIbjRKI46wXmARpaQ8PilC\nJJm+CvKqoXezs3omXHPg5PVntp2/IXTw/sJqddsePFSEEdOzhENR5lARAoGAOpD7\ncYwj6mmB4cu3KNxaAWxx71H/erZccMvWf6KrxInxgedqwfzMIt0Iaok4XRM6/DbS\nuj9+ArOkGGnlLDEYr9642TSnzKktQj7b4EH6PuOQKJeBHC/wCURDKBaO2EnRSxPT\nZ0v7h3xbT0vcpKQPbi5En9PRvmUiktvT3bMP/MECgYEAvSc+Q/WzGmUgMvFwqxsQ\n8CLCNLdXTggeLv1uU2mIsBEhG/2nYXmWZwPzBDN9PPm8AiCo6tuEbvRXyCt4nfj8\n1aYIQW/lMXFYv7bRhS9l3+klwroGQzJcFne/40Z34c2hUJMUwaLBGyiDDT7WJekA\nRttimzCXP6XPkmygLrSJCg8=\n-----END PRIVATE KEY-----\n",
+  "client_email": "drizzio@drizzio-gsheet-integration.iam.gserviceaccount.com",
+  "client_id": "115854701852634421096",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/drizzio%40drizzio-gsheet-integration.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
