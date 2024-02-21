@@ -23,15 +23,6 @@ namespace ASPNETWebApp48.Controllers.Api
     /// </summary>
     public class SampleController : ApiController
 	{
-        [HttpGet]
-        [Route("api/sample/gsheetintegration")]
-        public IHttpActionResult GetSheet(int maxItem = 5)
-        {
-            var sheet = GsheetIntegration.Run();
-
-            return Ok(sheet);
-        }
-
         // GET: WeatherForecast
         [HttpGet]
 		[Route("api/sample/getWeather")]

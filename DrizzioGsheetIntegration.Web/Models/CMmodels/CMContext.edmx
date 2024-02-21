@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ContactManagerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="cmContactStep">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ContactId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ContactManagerId" Type="int" Nullable="false" />
+          <Property Name="StepId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="DateEntered" Type="datetime" Nullable="false" />
+          <Property Name="DateLeft" Type="datetime" />
+          <Property Name="ExtraInfo" Type="ntext" />
+          <Property Name="DateArchived" Type="datetime" />
+          <Property Name="OwnerContactId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="SnoozeUntil" Type="datetime" />
+        </EntityType>
+        <EntityType Name="cmEntityData">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EntityID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Data" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="DefinitionId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ContactID" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="ContactManagerModelStoreContainer">
+          <EntitySet Name="cmContactStep" EntityType="Self.cmContactStep" Schema="br" store:Type="Tables" />
+          <EntitySet Name="cmEntityData" EntityType="Self.cmEntityData" Schema="br" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ContactManagerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="cmContactStep">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ContactId" Type="Guid" Nullable="false" />
+          <Property Name="ContactManagerId" Type="Int32" Nullable="false" />
+          <Property Name="StepId" Type="Guid" Nullable="false" />
+          <Property Name="DateEntered" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateLeft" Type="DateTime" Precision="3" />
+          <Property Name="ExtraInfo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateArchived" Type="DateTime" Precision="3" />
+          <Property Name="OwnerContactId" Type="Guid" Nullable="false" />
+          <Property Name="SnoozeUntil" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="cmEntityData">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EntityID" Type="Guid" Nullable="false" />
+          <Property Name="Data" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DefinitionId" Type="Guid" Nullable="false" />
+          <Property Name="ContactID" Type="Guid" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="CMContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="cmContactSteps" EntityType="Self.cmContactStep" />
+          <EntitySet Name="cmEntityDatas" EntityType="Self.cmEntityData" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ContactManagerModelStoreContainer" CdmEntityContainer="CMContext">
+          <EntitySetMapping Name="cmContactSteps">
+            <EntityTypeMapping TypeName="ContactManagerModel.cmContactStep">
+              <MappingFragment StoreEntitySet="cmContactStep">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ContactId" ColumnName="ContactId" />
+                <ScalarProperty Name="ContactManagerId" ColumnName="ContactManagerId" />
+                <ScalarProperty Name="StepId" ColumnName="StepId" />
+                <ScalarProperty Name="DateEntered" ColumnName="DateEntered" />
+                <ScalarProperty Name="DateLeft" ColumnName="DateLeft" />
+                <ScalarProperty Name="ExtraInfo" ColumnName="ExtraInfo" />
+                <ScalarProperty Name="DateArchived" ColumnName="DateArchived" />
+                <ScalarProperty Name="OwnerContactId" ColumnName="OwnerContactId" />
+                <ScalarProperty Name="SnoozeUntil" ColumnName="SnoozeUntil" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cmEntityDatas">
+            <EntityTypeMapping TypeName="ContactManagerModel.cmEntityData">
+              <MappingFragment StoreEntitySet="cmEntityData">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="EntityID" ColumnName="EntityID" />
+                <ScalarProperty Name="Data" ColumnName="Data" />
+                <ScalarProperty Name="DefinitionId" ColumnName="DefinitionId" />
+                <ScalarProperty Name="ContactID" ColumnName="ContactID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
