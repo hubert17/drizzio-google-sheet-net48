@@ -27,5 +27,6 @@ namespace DrizzioGsheetIntegration.Web.Models.CMmodels
     
         public virtual DbSet<cmContactStep> cmContactSteps { get; set; }
         public virtual DbSet<cmEntityData> cmEntityDatas { get; set; }
+        public virtual DbSet<cmDialSessionCall> cmDialSessionCalls { get; set; }
     }
 }

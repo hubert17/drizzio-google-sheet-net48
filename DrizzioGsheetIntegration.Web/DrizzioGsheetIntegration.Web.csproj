@@ -304,6 +304,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CMContext.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\CMmodels\cmDialSessionCall.cs">
+      <DependentUpon>CMContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CMmodels\cmEntityData.cs">
       <DependentUpon>CMContext.tt</DependentUpon>
     </Compile>

@@ -7,6 +7,7 @@
       <Diagram DiagramId="1b9c4952e7ee4935888c53b98241c4ec" Name="Diagram1">
         <EntityTypeShape EntityType="ContactManagerModel.cmContactStep" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ContactManagerModel.cmEntityData" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ContactManagerModel.cmDialSessionCall" Width="1.5" PointX="3.375" PointY="3.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

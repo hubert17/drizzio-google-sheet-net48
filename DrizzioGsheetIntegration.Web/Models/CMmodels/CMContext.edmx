@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="ContactManagerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="ContactManagerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="cmContactStep">
           <Key>
             <PropertyRef Name="Id" />
@@ -20,6 +20,23 @@
           <Property Name="OwnerContactId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="SnoozeUntil" Type="datetime" />
         </EntityType>
+        <EntityType Name="cmDialSessionCall">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DialSessionID" Type="int" Nullable="false" />
+          <Property Name="ContactID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="SessionOrder" Type="int" Nullable="false" />
+          <Property Name="LiveAnswer" Type="bit" />
+          <Property Name="StartTime" Type="datetime" />
+          <Property Name="EndTime" Type="datetime" />
+          <Property Name="Completed" Type="bit" Nullable="false" />
+          <Property Name="Outcome" Type="nvarchar" MaxLength="50" />
+          <Property Name="OutcomeDetails" Type="nvarchar(max)" />
+          <Property Name="ScriptRead" Type="int" />
+          <Property Name="CallGroup" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="cmEntityData">
           <Key>
             <PropertyRef Name="Id" />
@@ -32,10 +49,10 @@
         </EntityType>
         <EntityContainer Name="ContactManagerModelStoreContainer">
           <EntitySet Name="cmContactStep" EntityType="Self.cmContactStep" Schema="br" store:Type="Tables" />
+          <EntitySet Name="cmDialSessionCall" EntityType="Self.cmDialSessionCall" Schema="br" store:Type="Tables" />
           <EntitySet Name="cmEntityData" EntityType="Self.cmEntityData" Schema="br" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ContactManagerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -67,7 +84,25 @@
         <EntityContainer Name="CMContext" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="cmContactSteps" EntityType="Self.cmContactStep" />
           <EntitySet Name="cmEntityDatas" EntityType="Self.cmEntityData" />
+          <EntitySet Name="cmDialSessionCalls" EntityType="ContactManagerModel.cmDialSessionCall" />
         </EntityContainer>
+        <EntityType Name="cmDialSessionCall">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DialSessionID" Type="Int32" Nullable="false" />
+          <Property Name="ContactID" Type="Guid" Nullable="false" />
+          <Property Name="SessionOrder" Type="Int32" Nullable="false" />
+          <Property Name="LiveAnswer" Type="Boolean" />
+          <Property Name="StartTime" Type="DateTime" Precision="3" />
+          <Property Name="EndTime" Type="DateTime" Precision="3" />
+          <Property Name="Completed" Type="Boolean" Nullable="false" />
+          <Property Name="Outcome" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OutcomeDetails" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ScriptRead" Type="Int32" />
+          <Property Name="CallGroup" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -98,6 +133,24 @@
                 <ScalarProperty Name="Data" ColumnName="Data" />
                 <ScalarProperty Name="DefinitionId" ColumnName="DefinitionId" />
                 <ScalarProperty Name="ContactID" ColumnName="ContactID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cmDialSessionCalls">
+            <EntityTypeMapping TypeName="ContactManagerModel.cmDialSessionCall">
+              <MappingFragment StoreEntitySet="cmDialSessionCall">
+                <ScalarProperty Name="CallGroup" ColumnName="CallGroup" />
+                <ScalarProperty Name="ScriptRead" ColumnName="ScriptRead" />
+                <ScalarProperty Name="OutcomeDetails" ColumnName="OutcomeDetails" />
+                <ScalarProperty Name="Outcome" ColumnName="Outcome" />
+                <ScalarProperty Name="Completed" ColumnName="Completed" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="LiveAnswer" ColumnName="LiveAnswer" />
+                <ScalarProperty Name="SessionOrder" ColumnName="SessionOrder" />
+                <ScalarProperty Name="ContactID" ColumnName="ContactID" />
+                <ScalarProperty Name="DialSessionID" ColumnName="DialSessionID" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

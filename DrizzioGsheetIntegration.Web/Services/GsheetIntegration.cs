@@ -12,7 +12,7 @@ namespace ASPNETWebApp48.Services
 {
     public static class GsheetIntegration
     {
-        public static List<GsheetEntryDto> GetData(int month)
+        public static List<GsheetEntryDto> GetData(int month, int year)
         {
             // qual call steps: 77daea43-22bd-4b40-acec-391f7503d412 | 429e928c-4008-48ec-be5b-c1985b978b4a | cc652721-c936-4726-b4a3-ee23cdb2d970
             // Sales call steps: 0569c71d-aee7-4867-8e5b-0e54ee9b0463 | a8e6d521-fe16-4e8a-ab24-f1523af2b2f5 | 372560b1-e8db-46d0-8e14-b53da6c48272 | d09c90ad-c8b6-4a0e-867f-c0c3921e519b
@@ -34,21 +34,39 @@ namespace ASPNETWebApp48.Services
 
             var _db = new CMContext();
 
-            var data = from en in _db.cmEntityDatas
-                       join cs in _db.cmContactSteps
-                       on en.ContactID equals cs.ContactId
-                       where (qualCallIds.Contains(cs.StepId) || salesCallIds.Contains(cs.StepId))
-                            && cs.DateEntered.Month == month
-                       group cs by cs.DateEntered into g
-                       orderby g.Key.Day // Sort by day
+            var contactIds = (from cs in _db.cmContactSteps
+                              join en in _db.cmEntityDatas
+                              on cs.ContactId equals en.ContactID
+                              where en.Data.StartsWith("ig_ads")
+                                && en.DefinitionId.ToString() == "3BA42F3C-9503-4B5C-808D-09C6EB262D86"
+                                && (qualCallIds.Contains(cs.StepId) || salesCallIds.Contains(cs.StepId))
+                              select cs.ContactId).Distinct().ToList();
+
+            var data = from cs in _db.cmContactSteps
+                       where contactIds.Contains(cs.ContactId)
+                             && (cs.DateEntered.Month == month && cs.DateEntered.Year == year)
+                       group cs by System.Data.Entity.DbFunctions.TruncateTime(cs.DateEntered) into g
                        select new GsheetEntryDto
                        {
                            DateEntered = g.Key,
                            QualCallCount = g.Count(cs => qualCallIds.Contains(cs.StepId)),
-                           SalesCallCount = g.Count(cs => salesCallIds.Contains(cs.StepId))
+                           SalesCallCount = g.Count(cs => salesCallIds.Contains(cs.StepId)),
+                           QualCallShowup = (from c in _db.cmDialSessionCalls
+                                             where g.Select(gs => gs.ContactId).Contains(c.ContactID)
+                                                   && c.CallGroup == "Qualification Call"
+                                                   && c.LiveAnswer == true
+                                                   && c.Completed == true
+                                             select c).Count(),
+                           SalesCallShowup = (from c in _db.cmDialSessionCalls
+                                              where g.Select(gs => gs.ContactId).Contains(c.ContactID)
+                                                    && c.CallGroup == "Sales Call"
+                                                    && c.LiveAnswer == true
+                                                    && c.Completed == true
+                                              select c).Count()
                        };
 
-            var gsheetEntries = data.ToList();
+
+            var gsheetEntries = data.OrderBy(x => x.DateEntered).ToList();
             SaveToGoogleSheet(gsheetEntries);
 
             return gsheetEntries;

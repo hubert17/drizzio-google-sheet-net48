@@ -25,9 +25,9 @@ namespace ASPNETWebApp48.Controllers.Api
 	{
         [HttpPost]
         [Route("api/GoogleIntegration/PushToGoogleSheet")]
-        public IHttpActionResult GetSheet(int month)
+        public IHttpActionResult GetSheet(int monthInt = 2, int yearInt = 2024)
         {
-            var sheet = GsheetIntegration.GetData(month);
+            var sheet = GsheetIntegration.GetData(monthInt, yearInt);
             return Ok(sheet);
         }
 
