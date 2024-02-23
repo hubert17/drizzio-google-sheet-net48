@@ -28,6 +28,7 @@ namespace ASPNETWebApp48
                     //
                     //c.RootUrl(req => GetRootUrlFromAppConfig());
                     c.RootUrl(httpReq => $"{httpReq.RequestUri.Scheme}://{httpReq.RequestUri.Authority}" );
+                    //c.RootUrl(req => "https://e4b2-180-190-17-48.ngrok-free.app");
 
                     // If schemes are not explicitly provided in a Swagger 2.0 document, then the scheme used to access
                     // the docs is taken as the default. If your API supports multiple schemes and you want to be explicit

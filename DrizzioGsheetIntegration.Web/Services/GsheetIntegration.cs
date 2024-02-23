@@ -56,13 +56,13 @@ namespace ASPNETWebApp48.Services
                                                    && c.CallGroup == "Qualification Call"
                                                    && c.LiveAnswer == true
                                                    && c.Completed == true
-                                             select c).Count(),
+                                             select c.ContactID).Distinct().Count(),
                            SalesCallShowup = (from c in _db.cmDialSessionCalls
                                               where g.Select(gs => gs.ContactId).Contains(c.ContactID)
                                                     && c.CallGroup == "Sales Call"
                                                     && c.LiveAnswer == true
                                                     && c.Completed == true
-                                              select c).Count()
+                                              select c.ContactID).Distinct().Count()
                        };
 
 
@@ -86,10 +86,11 @@ namespace ASPNETWebApp48.Services
             var sheetHelper = new SheetHelper(documentId, serviceAccount, "");
             sheetHelper.Init(jsonCredsContent);
 
-            // Get all the rows for the first 2 columns in the spreadsheet
-            //var rows = sheetHelper.GetRows(new SheetRange("February", 1, 1, 2),
-            //    ValueRenderOptionEnum.FORMATTEDVALUE,
-            //    DateTimeRenderOptionEnum.FORMATTEDSTRING);
+           // Get all the rows for the first 2 columns in the spreadsheet
+
+           //var rows = sheetHelper.GetRows(new SheetRange("February", 1, 1, 2),
+           //    ValueRenderOptionEnum.FORMATTEDVALUE,
+           //    DateTimeRenderOptionEnum.FORMATTEDSTRING);
 
             var _rowsToAppend = new List<List<string>>();
 
