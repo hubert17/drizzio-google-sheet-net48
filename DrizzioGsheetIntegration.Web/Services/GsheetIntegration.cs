@@ -7,6 +7,7 @@ using DrizzioGsheetIntegration.Shared;
 using GoogleSheetsWrapper;
 using static Google.Apis.Sheets.v4.SpreadsheetsResource.ValuesResource.GetRequest;
 using DrizzioGsheetIntegration.Web.Models.CMmodels;
+using Google.Apis.Sheets.v4.Data;
 
 namespace ASPNETWebApp48.Services
 {
@@ -35,8 +36,7 @@ namespace ASPNETWebApp48.Services
             var _db = new CMContext();
 
             var contactIds = (from cs in _db.cmContactSteps
-                              join en in _db.cmEntityDatas
-                              on cs.ContactId equals en.ContactID
+                              join en in _db.cmEntityDatas on cs.ContactId equals en.ContactID
                               where en.Data.StartsWith("ig_ads")
                                 && en.DefinitionId.ToString() == "3BA42F3C-9503-4B5C-808D-09C6EB262D86"
                                 && (qualCallIds.Contains(cs.StepId) || salesCallIds.Contains(cs.StepId))
@@ -51,23 +51,36 @@ namespace ASPNETWebApp48.Services
                            DateEntered = g.Key,
                            QualCallCount = g.Count(cs => qualCallIds.Contains(cs.StepId)),
                            SalesCallCount = g.Count(cs => salesCallIds.Contains(cs.StepId)),
-                           QualCallShowup = (from c in _db.cmDialSessionCalls
-                                             where g.Select(gs => gs.ContactId).Contains(c.ContactID)
-                                                   && c.CallGroup == "Qualification Call"
-                                                   && c.LiveAnswer == true
-                                                   && c.Completed == true
-                                             select c.ContactID).Distinct().Count(),
-                           SalesCallShowup = (from c in _db.cmDialSessionCalls
-                                              where g.Select(gs => gs.ContactId).Contains(c.ContactID)
-                                                    && c.CallGroup == "Sales Call"
-                                                    && c.LiveAnswer == true
-                                                    && c.Completed == true
-                                              select c.ContactID).Distinct().Count()
+                           QualCallShowedUp = (from cd in _db.cmDialSessionCalls
+                                               where g.Select(gs => gs.ContactId).Contains(cd.ContactID)
+                                                     && cd.CallGroup == "Qualification Call"
+                                                     && cd.LiveAnswer == true
+                                                     && cd.Completed == true
+                                               select cd.ContactID).Distinct().Count(),
+                           SalesCallShowedUp = (from cd in _db.cmDialSessionCalls
+                                                where g.Select(gs => gs.ContactId).Contains(cd.ContactID)
+                                                      && cd.CallGroup == "Sales Call"
+                                                      && cd.LiveAnswer == true
+                                                      && cd.Completed == true
+                                                select cd.ContactID).Distinct().Count(),
+                           UnitSold = (from co in _db.cmContactOrders
+                                       where g.Select(gs => gs.ContactId).Distinct().Contains(co.ContactID)
+                                       select co).Count(),
+                           Cost = (from co in _db.cmContactOrders
+                                   where g.Select(gs => gs.ContactId).Distinct().Contains(co.ContactID)
+                                   select co.Amount).Sum(),
+                           Revenue = (from co in _db.cmContactOrders
+                                      join fo in _db.FulfillmentOrders
+                                      on co.Id equals fo.OrderID
+                                      where g.Select(gs => gs.ContactId).Distinct().Contains(co.ContactID)
+                                            && fo.DateCompleted != null
+                                      select fo.OrderSubtotal).Sum()
                        };
 
 
+
             var gsheetEntries = data.OrderBy(x => x.DateEntered).ToList();
-            SaveToGoogleSheet(gsheetEntries);
+            SaveToGoogleSheet2(gsheetEntries);
 
             return gsheetEntries;
         }
@@ -88,9 +101,9 @@ namespace ASPNETWebApp48.Services
 
            // Get all the rows for the first 2 columns in the spreadsheet
 
-           //var rows = sheetHelper.GetRows(new SheetRange("February", 1, 1, 2),
-           //    ValueRenderOptionEnum.FORMATTEDVALUE,
-           //    DateTimeRenderOptionEnum.FORMATTEDSTRING);
+           var rows = sheetHelper.GetRows(new SheetRange("February", 1, 1, 2),
+               ValueRenderOptionEnum.FORMATTEDVALUE,
+               DateTimeRenderOptionEnum.FORMATTEDSTRING);
 
             var _rowsToAppend = new List<List<string>>();
 
@@ -129,5 +142,71 @@ namespace ASPNETWebApp48.Services
 
             //return rows2.ToArray(); ;
         }
+
+        public static void SaveToGoogleSheet2(List<GsheetEntryDto> gsheetEntries)
+        {
+            // Get the Google Spreadsheet Config Values
+            var serviceAccount = "drizzio@drizzio-gsheet-integration.iam.gserviceaccount.com";
+            var documentId = "1pfTfdZaJQXUQLBnT6OidABDBN8zAwky31JNl80x1aC8";
+            var jsonCredsPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "drizzio-gsheet-integration-23a9889a1516.json");
+
+            // In this case the json creds file is stored locally, but you can store this however you want to (Azure Key Vault, HSM, etc)
+            var jsonCredsContent = System.IO.File.ReadAllText(jsonCredsPath);
+
+            // Create a new SheetHelper class
+            var sheetHelper = new SheetHelper(documentId, serviceAccount, "test_February Spanish");
+            sheetHelper.Init(jsonCredsContent);
+
+            // Get all the rows for the first 2 columns in the spreadsheet
+            //var rows = sheetHelper.GetRows(new SheetRange("February Spanish", 1, 3, 40, 8)).ToList();
+
+
+            gsheetEntries.ForEach(row =>
+            {
+                var gheetRow = row.DateEntered.Value.Day + 2;
+                UpdateCell(sheetHelper, $"B{gheetRow}", row.DateEntered.ToString());
+                UpdateCell(sheetHelper, $"X{gheetRow}", row.QualCallCount.ToString());
+                UpdateCell(sheetHelper, $"AD{gheetRow}", row.QualCallShowedUp.ToString());
+                UpdateCell(sheetHelper, $"AH{gheetRow}", row.SalesCallCount.ToString());
+                UpdateCell(sheetHelper, $"AF{gheetRow}", row.SalesCallShowedUp.ToString());
+                UpdateCell(sheetHelper, $"AK{gheetRow}", row.UnitSold.ToString());
+                UpdateCell(sheetHelper, $"AN{gheetRow}", row.Revenue.ToString());
+            });
+        }
+
+        static void UpdateCell(SheetHelper sheetHelper, string cell, string value)
+        {
+            var updates = new List<BatchUpdateRequestObject>();
+            updates.Add(new BatchUpdateRequestObject()
+            {
+                Range = new SheetRange($"{cell}:{cell}"),
+                Data = new CellData()
+                {
+                    UserEnteredValue = new ExtendedValue()
+                    {
+                        StringValue = value
+                    }
+                }
+            });
+
+            // Note setting the field mask to "*" tells the API to save all property values, even if they are null / blank
+            sheetHelper.BatchUpdate(updates, "*");
+        }
+
+        static DateTime ToCSharpDate(double serialNumber)
+        {
+            // The base date for Google Sheets is December 30, 1899
+            DateTime baseDate = new DateTime(1899, 12, 30);
+
+            // Add the number of days (whole part) to the base date
+            DateTime result = baseDate.AddDays(serialNumber);
+
+            // Google Sheets also supports fractions of a day, which we can convert to hours, minutes, seconds, etc.
+            double fraction = serialNumber - Math.Floor(serialNumber);
+            result = result.AddHours(24 * fraction);
+
+            return result;
+        }
+
     }
 }

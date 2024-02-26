@@ -286,6 +286,9 @@
     <Compile Include="Helpers\SimpleLogger.cs" />
     <Compile Include="Helpers\UserAccount.cs" />
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\CMmodels\cmContactOrder.cs">
+      <DependentUpon>CMContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CMmodels\cmContactStep.cs">
       <DependentUpon>CMContext.tt</DependentUpon>
     </Compile>
@@ -308,6 +311,9 @@
       <DependentUpon>CMContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CMmodels\cmEntityData.cs">
+      <DependentUpon>CMContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CMmodels\FulfillmentOrder.cs">
       <DependentUpon>CMContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Product.cs" />

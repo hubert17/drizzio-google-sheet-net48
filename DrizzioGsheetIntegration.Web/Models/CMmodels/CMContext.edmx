@@ -5,6 +5,28 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="ContactManagerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="cmContactOrder">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ContactID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ProductIds" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="Amount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="OrderStatusId" Type="int" Nullable="false" />
+          <Property Name="OrderDate" Type="datetime" Nullable="false" />
+          <Property Name="LastUpdate" Type="datetime" Nullable="false" />
+          <Property Name="DateCompleted" Type="date" />
+          <Property Name="TenantId" Type="int" Nullable="false" />
+          <Property Name="AffiliateUpline" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Confirmed" Type="bit" Nullable="false" />
+          <Property Name="PaymentType" Type="nvarchar" MaxLength="50" />
+          <Property Name="ContactManagerId" Type="int" />
+          <Property Name="Setter" Type="uniqueidentifier" />
+          <Property Name="Closer" Type="uniqueidentifier" />
+          <Property Name="Coach" Type="uniqueidentifier" />
+        </EntityType>
         <EntityType Name="cmContactStep">
           <Key>
             <PropertyRef Name="Id" />
@@ -47,10 +69,81 @@
           <Property Name="DefinitionId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="ContactID" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
+        <EntityType Name="FulfillmentOrder">
+          <Key>
+            <PropertyRef Name="FulfillmentOrderID" />
+          </Key>
+          <Property Name="FulfillmentOrderID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="PublicID" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="CartOwnerContactUserID" Type="uniqueidentifier" />
+          <Property Name="PurchaserContactID" Type="uniqueidentifier" />
+          <Property Name="ShiptoContactID" Type="uniqueidentifier" />
+          <Property Name="ShiptoFirstName" Type="nvarchar" MaxLength="150" />
+          <Property Name="ShiptoLastName" Type="nvarchar" MaxLength="150" />
+          <Property Name="ShiptoAddress1" Type="nvarchar" MaxLength="200" />
+          <Property Name="ShiptoAddress2" Type="nvarchar" MaxLength="200" />
+          <Property Name="ShiptoCity" Type="nvarchar" MaxLength="100" />
+          <Property Name="ShiptoStatePossessionID" Type="uniqueidentifier" />
+          <Property Name="ShiptoPostalCode" Type="nvarchar" MaxLength="15" />
+          <Property Name="ShiptoCountryID" Type="uniqueidentifier" />
+          <Property Name="ShiptoEmail" Type="nvarchar" MaxLength="200" />
+          <Property Name="ShiptoPhone" Type="nvarchar" MaxLength="20" />
+          <Property Name="BilltoFirstName" Type="nvarchar" MaxLength="150" />
+          <Property Name="BilltoLastName" Type="nvarchar" MaxLength="150" />
+          <Property Name="BilltoAddress1" Type="nvarchar" MaxLength="200" />
+          <Property Name="BilltoAddress2" Type="nvarchar" MaxLength="200" />
+          <Property Name="BilltoCity" Type="nvarchar" MaxLength="100" />
+          <Property Name="BilltoStatePossessionID" Type="uniqueidentifier" />
+          <Property Name="BilltoPostalCode" Type="nvarchar" MaxLength="15" />
+          <Property Name="BilltoCountryID" Type="uniqueidentifier" />
+          <Property Name="BilltoEmail" Type="nvarchar" MaxLength="200" />
+          <Property Name="BilltoPhone" Type="nvarchar" MaxLength="20" />
+          <Property Name="OrderDate" Type="datetime" />
+          <Property Name="RequestDate" Type="datetime" />
+          <Property Name="OrderStatus" Type="nvarchar" MaxLength="100" />
+          <Property Name="OrderSource" Type="nvarchar" MaxLength="200" />
+          <Property Name="DateCompleted" Type="datetime" />
+          <Property Name="OrderSubtotal" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="OrderSandHTotal" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="OrderTaxTotal" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="IsArchive" Type="bit" />
+          <Property Name="IsDelete" Type="bit" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="CreatedByContactUserID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="DateModified" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedByContactUserID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ImportOriginID" Type="bigint" />
+          <Property Name="OriginTable" Type="nvarchar" MaxLength="50" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+          <Property Name="OrderID" Type="int" Nullable="false" />
+          <Property Name="Phase" Type="int" Nullable="false" />
+          <Property Name="DeclineCount" Type="int" Nullable="false" />
+          <Property Name="CommisionEarnedByContactID" Type="uniqueidentifier" />
+          <Property Name="ContactOrder_Id" Type="int" />
+        </EntityType>
+        <Association Name="FK_FulfillmentOrder_FulfillmentOrder">
+          <End Role="FulfillmentOrder" Type="Self.FulfillmentOrder" Multiplicity="1" />
+          <End Role="FulfillmentOrder1" Type="Self.FulfillmentOrder" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="FulfillmentOrder">
+              <PropertyRef Name="FulfillmentOrderID" />
+            </Principal>
+            <Dependent Role="FulfillmentOrder1">
+              <PropertyRef Name="FulfillmentOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="ContactManagerModelStoreContainer">
+          <EntitySet Name="cmContactOrder" EntityType="Self.cmContactOrder" Schema="br" store:Type="Tables" />
           <EntitySet Name="cmContactStep" EntityType="Self.cmContactStep" Schema="br" store:Type="Tables" />
           <EntitySet Name="cmDialSessionCall" EntityType="Self.cmDialSessionCall" Schema="br" store:Type="Tables" />
           <EntitySet Name="cmEntityData" EntityType="Self.cmEntityData" Schema="br" store:Type="Tables" />
+          <EntitySet Name="FulfillmentOrder" EntityType="Self.FulfillmentOrder" Schema="Fulfillment" store:Type="Tables" />
+          <AssociationSet Name="FK_FulfillmentOrder_FulfillmentOrder" Association="Self.FK_FulfillmentOrder_FulfillmentOrder">
+            <End Role="FulfillmentOrder" EntitySet="FulfillmentOrder" />
+            <End Role="FulfillmentOrder1" EntitySet="FulfillmentOrder" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -85,6 +178,12 @@
           <EntitySet Name="cmContactSteps" EntityType="Self.cmContactStep" />
           <EntitySet Name="cmEntityDatas" EntityType="Self.cmEntityData" />
           <EntitySet Name="cmDialSessionCalls" EntityType="ContactManagerModel.cmDialSessionCall" />
+          <EntitySet Name="cmContactOrders" EntityType="ContactManagerModel.cmContactOrder" />
+          <EntitySet Name="FulfillmentOrders" EntityType="ContactManagerModel.FulfillmentOrder" />
+          <AssociationSet Name="FK_FulfillmentOrder_FulfillmentOrder" Association="ContactManagerModel.FK_FulfillmentOrder_FulfillmentOrder">
+            <End Role="FulfillmentOrder" EntitySet="FulfillmentOrders" />
+            <End Role="FulfillmentOrder1" EntitySet="FulfillmentOrders" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="cmDialSessionCall">
           <Key>
@@ -103,6 +202,95 @@
           <Property Name="ScriptRead" Type="Int32" />
           <Property Name="CallGroup" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="cmContactOrder">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ContactID" Type="Guid" Nullable="false" />
+          <Property Name="ProductIds" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="OrderStatusId" Type="Int32" Nullable="false" />
+          <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LastUpdate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateCompleted" Type="DateTime" Precision="0" />
+          <Property Name="TenantId" Type="Int32" Nullable="false" />
+          <Property Name="AffiliateUpline" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Confirmed" Type="Boolean" Nullable="false" />
+          <Property Name="PaymentType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ContactManagerId" Type="Int32" />
+          <Property Name="Setter" Type="Guid" />
+          <Property Name="Closer" Type="Guid" />
+          <Property Name="Coach" Type="Guid" />
+        </EntityType>
+        <EntityType Name="FulfillmentOrder">
+          <Key>
+            <PropertyRef Name="FulfillmentOrderID" />
+          </Key>
+          <Property Name="FulfillmentOrderID" Type="Guid" Nullable="false" />
+          <Property Name="PublicID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CartOwnerContactUserID" Type="Guid" />
+          <Property Name="PurchaserContactID" Type="Guid" />
+          <Property Name="ShiptoContactID" Type="Guid" />
+          <Property Name="ShiptoFirstName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ShiptoLastName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ShiptoAddress1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ShiptoAddress2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ShiptoCity" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ShiptoStatePossessionID" Type="Guid" />
+          <Property Name="ShiptoPostalCode" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="ShiptoCountryID" Type="Guid" />
+          <Property Name="ShiptoEmail" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ShiptoPhone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="BilltoFirstName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="BilltoLastName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="BilltoAddress1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="BilltoAddress2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="BilltoCity" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BilltoStatePossessionID" Type="Guid" />
+          <Property Name="BilltoPostalCode" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="BilltoCountryID" Type="Guid" />
+          <Property Name="BilltoEmail" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="BilltoPhone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="OrderDate" Type="DateTime" Precision="3" />
+          <Property Name="RequestDate" Type="DateTime" Precision="3" />
+          <Property Name="OrderStatus" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="OrderSource" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DateCompleted" Type="DateTime" Precision="3" />
+          <Property Name="OrderSubtotal" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="OrderSandHTotal" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="OrderTaxTotal" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsArchive" Type="Boolean" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedByContactUserID" Type="Guid" Nullable="false" />
+          <Property Name="DateModified" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedByContactUserID" Type="Guid" Nullable="false" />
+          <Property Name="ImportOriginID" Type="Int64" />
+          <Property Name="OriginTable" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OrderID" Type="Int32" Nullable="false" />
+          <Property Name="Phase" Type="Int32" Nullable="false" />
+          <Property Name="DeclineCount" Type="Int32" Nullable="false" />
+          <Property Name="CommisionEarnedByContactID" Type="Guid" />
+          <Property Name="ContactOrder_Id" Type="Int32" />
+          <NavigationProperty Name="FulfillmentOrder1" Relationship="ContactManagerModel.FK_FulfillmentOrder_FulfillmentOrder" FromRole="FulfillmentOrder" ToRole="FulfillmentOrder1" />
+          <NavigationProperty Name="FulfillmentOrder2" Relationship="ContactManagerModel.FK_FulfillmentOrder_FulfillmentOrder" FromRole="FulfillmentOrder1" ToRole="FulfillmentOrder" />
+        </EntityType>
+        <Association Name="FK_FulfillmentOrder_FulfillmentOrder">
+          <End Type="ContactManagerModel.FulfillmentOrder" Role="FulfillmentOrder" Multiplicity="1" />
+          <End Type="ContactManagerModel.FulfillmentOrder" Role="FulfillmentOrder1" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="FulfillmentOrder">
+              <PropertyRef Name="FulfillmentOrderID" />
+            </Principal>
+            <Dependent Role="FulfillmentOrder1">
+              <PropertyRef Name="FulfillmentOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -151,6 +339,83 @@
                 <ScalarProperty Name="ContactID" ColumnName="ContactID" />
                 <ScalarProperty Name="DialSessionID" ColumnName="DialSessionID" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cmContactOrders">
+            <EntityTypeMapping TypeName="ContactManagerModel.cmContactOrder">
+              <MappingFragment StoreEntitySet="cmContactOrder">
+                <ScalarProperty Name="Coach" ColumnName="Coach" />
+                <ScalarProperty Name="Closer" ColumnName="Closer" />
+                <ScalarProperty Name="Setter" ColumnName="Setter" />
+                <ScalarProperty Name="ContactManagerId" ColumnName="ContactManagerId" />
+                <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
+                <ScalarProperty Name="Confirmed" ColumnName="Confirmed" />
+                <ScalarProperty Name="AffiliateUpline" ColumnName="AffiliateUpline" />
+                <ScalarProperty Name="TenantId" ColumnName="TenantId" />
+                <ScalarProperty Name="DateCompleted" ColumnName="DateCompleted" />
+                <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="OrderStatusId" ColumnName="OrderStatusId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="ProductIds" ColumnName="ProductIds" />
+                <ScalarProperty Name="ContactID" ColumnName="ContactID" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FulfillmentOrders">
+            <EntityTypeMapping TypeName="ContactManagerModel.FulfillmentOrder">
+              <MappingFragment StoreEntitySet="FulfillmentOrder">
+                <ScalarProperty Name="ContactOrder_Id" ColumnName="ContactOrder_Id" />
+                <ScalarProperty Name="CommisionEarnedByContactID" ColumnName="CommisionEarnedByContactID" />
+                <ScalarProperty Name="DeclineCount" ColumnName="DeclineCount" />
+                <ScalarProperty Name="Phase" ColumnName="Phase" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="OriginTable" ColumnName="OriginTable" />
+                <ScalarProperty Name="ImportOriginID" ColumnName="ImportOriginID" />
+                <ScalarProperty Name="ModifiedByContactUserID" ColumnName="ModifiedByContactUserID" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="CreatedByContactUserID" ColumnName="CreatedByContactUserID" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="IsArchive" ColumnName="IsArchive" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="OrderTaxTotal" ColumnName="OrderTaxTotal" />
+                <ScalarProperty Name="OrderSandHTotal" ColumnName="OrderSandHTotal" />
+                <ScalarProperty Name="OrderSubtotal" ColumnName="OrderSubtotal" />
+                <ScalarProperty Name="DateCompleted" ColumnName="DateCompleted" />
+                <ScalarProperty Name="OrderSource" ColumnName="OrderSource" />
+                <ScalarProperty Name="OrderStatus" ColumnName="OrderStatus" />
+                <ScalarProperty Name="RequestDate" ColumnName="RequestDate" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="BilltoPhone" ColumnName="BilltoPhone" />
+                <ScalarProperty Name="BilltoEmail" ColumnName="BilltoEmail" />
+                <ScalarProperty Name="BilltoCountryID" ColumnName="BilltoCountryID" />
+                <ScalarProperty Name="BilltoPostalCode" ColumnName="BilltoPostalCode" />
+                <ScalarProperty Name="BilltoStatePossessionID" ColumnName="BilltoStatePossessionID" />
+                <ScalarProperty Name="BilltoCity" ColumnName="BilltoCity" />
+                <ScalarProperty Name="BilltoAddress2" ColumnName="BilltoAddress2" />
+                <ScalarProperty Name="BilltoAddress1" ColumnName="BilltoAddress1" />
+                <ScalarProperty Name="BilltoLastName" ColumnName="BilltoLastName" />
+                <ScalarProperty Name="BilltoFirstName" ColumnName="BilltoFirstName" />
+                <ScalarProperty Name="ShiptoPhone" ColumnName="ShiptoPhone" />
+                <ScalarProperty Name="ShiptoEmail" ColumnName="ShiptoEmail" />
+                <ScalarProperty Name="ShiptoCountryID" ColumnName="ShiptoCountryID" />
+                <ScalarProperty Name="ShiptoPostalCode" ColumnName="ShiptoPostalCode" />
+                <ScalarProperty Name="ShiptoStatePossessionID" ColumnName="ShiptoStatePossessionID" />
+                <ScalarProperty Name="ShiptoCity" ColumnName="ShiptoCity" />
+                <ScalarProperty Name="ShiptoAddress2" ColumnName="ShiptoAddress2" />
+                <ScalarProperty Name="ShiptoAddress1" ColumnName="ShiptoAddress1" />
+                <ScalarProperty Name="ShiptoLastName" ColumnName="ShiptoLastName" />
+                <ScalarProperty Name="ShiptoFirstName" ColumnName="ShiptoFirstName" />
+                <ScalarProperty Name="ShiptoContactID" ColumnName="ShiptoContactID" />
+                <ScalarProperty Name="PurchaserContactID" ColumnName="PurchaserContactID" />
+                <ScalarProperty Name="CartOwnerContactUserID" ColumnName="CartOwnerContactUserID" />
+                <ScalarProperty Name="PublicID" ColumnName="PublicID" />
+                <ScalarProperty Name="FulfillmentOrderID" ColumnName="FulfillmentOrderID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
