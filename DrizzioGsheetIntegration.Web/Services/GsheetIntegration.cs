@@ -147,7 +147,7 @@ namespace ASPNETWebApp48.Services
         {
             // Get the Google Spreadsheet Config Values
             var serviceAccount = "drizzio@drizzio-gsheet-integration.iam.gserviceaccount.com";
-            var documentId = "1pfTfdZaJQXUQLBnT6OidABDBN8zAwky31JNl80x1aC8";
+            var documentId = "";
             var jsonCredsPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "drizzio-gsheet-integration-23a9889a1516.json");
 
             // In this case the json creds file is stored locally, but you can store this however you want to (Azure Key Vault, HSM, etc)
