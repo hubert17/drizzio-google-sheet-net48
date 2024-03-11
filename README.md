@@ -6,5 +6,5 @@
 4. In Google Sheet, share to Service Account email
 5. Nuget: GoogleSheetsWrapper48 
 
-https://docs.google.com/spreadsheets/d/1Ho9XvE7eJlI09Yh1xfH32FOyN-OQCJLbkF0SahurwH8/edit
-Sheet documentId: 1Ho9XvE7eJlI09Yh1xfH32FOyN-OQCJLbkF0SahurwH8
+https://docs.google.com/spreadsheets/d/1Ho9XvE7eJlI09Yh1xfH32FOyN-******/edit
+Sheet documentId: 1Ho9XvE7eJlI09Yh1xfH32FOyN********
